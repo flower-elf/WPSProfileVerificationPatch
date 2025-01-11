@@ -1,0 +1,19 @@
+﻿EXPORTS
+
+GetFileVersionInfoA=MGetFileVersionInfoA @1
+GetFileVersionInfoByHandle=MGetFileVersionInfoByHandle @2
+GetFileVersionInfoExA=MGetFileVersionInfoExA @3
+GetFileVersionInfoExW=MGetFileVersionInfoExW @4
+GetFileVersionInfoSizeA=MGetFileVersionInfoSizeA @5
+GetFileVersionInfoSizeExA=MGetFileVersionInfoSizeExA @6
+GetFileVersionInfoSizeExW=MGetFileVersionInfoSizeExW @7
+GetFileVersionInfoSizeW=MGetFileVersionInfoSizeW @8
+GetFileVersionInfoW=MGetFileVersionInfoW @9
+VerFindFileA=MVerFindFileA @10
+VerFindFileW=MVerFindFileW @11
+VerInstallFileA=MVerInstallFileA @12
+VerInstallFileW=MVerInstallFileW @13
+VerLanguageNameA=MVerLanguageNameA @14
+VerLanguageNameW=MVerLanguageNameW @15
+VerQueryValueA=MVerQueryValueA @16
+VerQueryValueW=MVerQueryValueW @17
