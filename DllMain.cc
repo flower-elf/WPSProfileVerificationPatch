@@ -7,7 +7,7 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reasonForCall, LPVOID reserved) {
     switch (reasonForCall) {
         case DLL_PROCESS_ATTACH:
             Version::Load();
-            KRSAVerifyFileHook::Install();
+            KRSAVerifyFileHook::Install(module);
             break;
         case DLL_PROCESS_DETACH:
             Version::Unload();

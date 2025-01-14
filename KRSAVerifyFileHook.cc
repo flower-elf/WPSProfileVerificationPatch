@@ -18,7 +18,7 @@ namespace WPSHashPatch {
         return true;
     }
 
-    void KRSAVerifyFileHook::UpdateKRSAVerifyFileAddress() {
+    void KRSAVerifyFileHook::UpdateKRSAVerifyFileAddress(HMODULE module) {
 #if defined DETOURS_X64
         const std::array<uint16_t, 19> pattern = { 0x40, 0x53, 0x56, 0x57, 0x41, 0x54, 0x41, 0x55, 0x41, 0x56, 0x41, 0x57, 0x48, 0x81, 0xEC, 0xD0, 0x02, 0x00, 0x00 };
 #elif defined DETOURS_X86
@@ -26,9 +26,16 @@ namespace WPSHashPatch {
 #else
 #error "Unsupported architecture"
 #endif
-        HMODULE krt = LoadLibraryA("krt.dll");
+        CHAR path[MAX_PATH];
+        UINT size = GetModuleFileNameA(module, path, MAX_PATH);
+        if (size == 0 || size >= MAX_PATH) {
+            throw std::runtime_error("Failed to get module file name");
+        }
+        LPSTR fileName = PathFindFileNameA(path);
+        std::memcpy(fileName, "krt.dll", 8);
+        HMODULE krt = LoadLibraryA(path); // load krt.dll of the same directory
         if (!krt) {
-            return;
+            return; // krt.dll not found, not hooking KRSAVerifyFile
         }
         std::span<const uint8_t> krtData(reinterpret_cast<const uint8_t*>(krt), ProcessUtil::GetModuleSize(krt));
         const std::vector<const uint8_t*> matches = PatternUtil::FindPattern(krtData, pattern, 0, false, 1);
@@ -37,11 +44,11 @@ namespace WPSHashPatch {
         }
     }
 
-    void KRSAVerifyFileHook::Install() {
+    void KRSAVerifyFileHook::Install(HMODULE module) {
         if (kRSAVerifyFile != nullptr) {
             return;
         }
-        UpdateKRSAVerifyFileAddress();
+        UpdateKRSAVerifyFileAddress(module);
         if (kRSAVerifyFile == nullptr) {
             return;
         }
