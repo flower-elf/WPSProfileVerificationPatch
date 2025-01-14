@@ -59,6 +59,9 @@ namespace WPSHashPatch {
         }
         CHAR path[MAX_PATH];
         UINT size = GetSystemDirectoryA(path, MAX_PATH);
+        if (size == 0 || size >= MAX_PATH) {
+            throw std::runtime_error("Failed to get system directory");
+        }
         std::memcpy(path + size, "\\version.dll", 13);
         handle = LoadLibraryA(path);
         if (handle == NULL) {
