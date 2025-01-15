@@ -15,56 +15,56 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Framework.h">
+    <ClInclude Include="Source\Framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Version.h">
+    <ClInclude Include="Source\Version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Detours\Detours.h">
+    <ClInclude Include="Source\Detours\Detours.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="KRSAVerifyFileHook.h">
+    <ClInclude Include="Source\KRSAVerifyFileHook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ProcessUtil.h">
+    <ClInclude Include="Source\ProcessUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PatternUtil.h">
+    <ClInclude Include="Source\PatternUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DllMain.cc">
+    <ClCompile Include="Source\DllMain.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Version.cc">
+    <ClCompile Include="Source\Version.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VersionExports.cc">
+    <ClCompile Include="Source\VersionExports.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="KRSAVerifyFileHook.cc">
+    <ClCompile Include="Source\KRSAVerifyFileHook.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Detours\Modules.cc">
+    <ClCompile Include="Source\Detours\Modules.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Detours\Detours.cc">
+    <ClCompile Include="Source\Detours\Detours.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Detours\DisAsm.cc">
+    <ClCompile Include="Source\Detours\DisAsm.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProcessUtil.cc">
+    <ClCompile Include="Source\ProcessUtil.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PatternUtil.cc">
+    <ClCompile Include="Source\PatternUtil.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="VersionExports.def">
+    <None Include="Source\VersionExports.def">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

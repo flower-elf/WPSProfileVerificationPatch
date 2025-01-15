@@ -100,7 +100,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <ModuleDefinitionFile>VersionExports.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>Source\VersionExports.def</ModuleDefinitionFile>
       <AdditionalDependencies>Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -122,7 +122,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <ModuleDefinitionFile>VersionExports.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>Source\VersionExports.def</ModuleDefinitionFile>
       <AdditionalDependencies>Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -140,7 +140,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <ModuleDefinitionFile>VersionExports.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>Source\VersionExports.def</ModuleDefinitionFile>
       <AdditionalDependencies>Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -162,31 +162,31 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <ModuleDefinitionFile>VersionExports.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>Source\VersionExports.def</ModuleDefinitionFile>
       <AdditionalDependencies>Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Detours\Detours.h" />
-    <ClInclude Include="Framework.h" />
-    <ClInclude Include="KRSAVerifyFileHook.h" />
-    <ClInclude Include="PatternUtil.h" />
-    <ClInclude Include="ProcessUtil.h" />
-    <ClInclude Include="Version.h" />
+    <ClInclude Include="Source\Detours\Detours.h" />
+    <ClInclude Include="Source\Framework.h" />
+    <ClInclude Include="Source\KRSAVerifyFileHook.h" />
+    <ClInclude Include="Source\PatternUtil.h" />
+    <ClInclude Include="Source\ProcessUtil.h" />
+    <ClInclude Include="Source\Version.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Detours\Detours.cc" />
-    <ClCompile Include="Detours\DisAsm.cc" />
-    <ClCompile Include="Detours\Modules.cc" />
-    <ClCompile Include="DllMain.cc" />
-    <ClCompile Include="KRSAVerifyFileHook.cc" />
-    <ClCompile Include="PatternUtil.cc" />
-    <ClCompile Include="ProcessUtil.cc" />
-    <ClCompile Include="Version.cc" />
-    <ClCompile Include="VersionExports.cc" />
+    <ClCompile Include="Source\Detours\Detours.cc" />
+    <ClCompile Include="Source\Detours\DisAsm.cc" />
+    <ClCompile Include="Source\Detours\Modules.cc" />
+    <ClCompile Include="Source\DllMain.cc" />
+    <ClCompile Include="Source\KRSAVerifyFileHook.cc" />
+    <ClCompile Include="Source\PatternUtil.cc" />
+    <ClCompile Include="Source\ProcessUtil.cc" />
+    <ClCompile Include="Source\Version.cc" />
+    <ClCompile Include="Source\VersionExports.cc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="VersionExports.def" />
+    <None Include="Source\VersionExports.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
