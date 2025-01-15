@@ -1,0 +1,40 @@
+name: Build And Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build_and_release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+
+      - name: Build x64
+        run: msbuild -m -p:Configuration=Release -p:Platform=x64
+
+      - name: Build x86
+        run: msbuild -m -p:Configuration=Release -p:Platform=x86
+
+      - name: Rename
+        run: |
+          Rename-Item -Path x64/Release/version.dll -NewName version64.dll
+          Rename-Item -Path Release/version.dll -NewName version32.dll
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          fail_on_unmatched_files: true
+          files: |
+            x64/Release/version64.dll
+            Release/version32.dll
