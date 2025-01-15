@@ -27,7 +27,7 @@ namespace WPSHashPatch {
 #error "Unsupported architecture"
 #endif
         CHAR path[MAX_PATH];
-        UINT size = GetModuleFileNameA(module, path, MAX_PATH);
+        DWORD size = GetModuleFileNameA(module, path, MAX_PATH);
         if (size == 0 || size >= MAX_PATH) {
             throw std::runtime_error("Failed to get module file name");
         }
