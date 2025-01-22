@@ -115,7 +115,7 @@
     </MASM>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resources\Resources.rc" />
+    <ResourceCompile Include="Source\Resources\Resources.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

@@ -95,7 +95,7 @@
     </MASM>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resources\Resources.rc">
+    <ResourceCompile Include="Source\Resources\Resources.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
