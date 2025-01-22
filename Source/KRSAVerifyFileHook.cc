@@ -1,12 +1,14 @@
-#include "Framework.h"
-#include "Detours/Detours.h"
-#include "KRSAVerifyFileHook.h"
-#include "ProcessUtil.h"
-#include "PatternUtil.h"
+#include <Windows.h>
 #include <stdexcept>
+#include <memory>
 #include <array>
+#include "Detours.h"
+#include "KRSAVerifyFileHook.h"
+#include "ModuleUtil.h"
+#include "PatternUtil.h"
+#include "VersionUtil.h"
 
-namespace WPSHashPatch {
+namespace WPSProfileVerificationPatch {
     bool (*KRSAVerifyFileHook::kRSAVerifyFile)(const std::string& publicKey, const std::string& fileHash, const std::string& fileSignature) = nullptr;
 
     bool KRSAVerifyFileHook::KRSAVerifyFile(const std::string& publicKey, const std::string& fileHash, const std::string& fileSignature) {
@@ -18,7 +20,7 @@ namespace WPSHashPatch {
         return true;
     }
 
-    void KRSAVerifyFileHook::UpdateKRSAVerifyFileAddress(HMODULE module) {
+    void KRSAVerifyFileHook::UpdateKRSAVerifyFileAddress() {
 #if defined DETOURS_X64
         const std::array<uint16_t, 19> pattern = { 0x40, 0x53, 0x56, 0x57, 0x41, 0x54, 0x41, 0x55, 0x41, 0x56, 0x41, 0x57, 0x48, 0x81, 0xEC, 0xD0, 0x02, 0x00, 0x00 };
 #elif defined DETOURS_X86
@@ -26,29 +28,43 @@ namespace WPSHashPatch {
 #else
 #error "Unsupported architecture"
 #endif
-        CHAR path[MAX_PATH];
-        DWORD size = GetModuleFileNameA(module, path, MAX_PATH);
-        if (size == 0 || size >= MAX_PATH) {
-            throw std::runtime_error("Failed to get module file name");
+        std::string fileName = ModuleUtil::GetFileName(nullptr);
+        std::unique_ptr<const uint8_t[]> versionInfoData = VersionUtil::GetVersionInfoData(fileName);
+        std::optional<std::span<const uint8_t>> productName = VersionUtil::QueryVersionInfoValue(versionInfoData, "\\StringFileInfo\\000004b0\\ProductName");
+        if (!productName.has_value() || productName->size() != 11 || std::memcmp(productName->data(), "WPS Office", 11) != 0) { // Not WPS Office
+            return;
         }
-        LPSTR fileName = PathFindFileNameA(path);
-        std::memcpy(fileName, "krt.dll", 8);
-        HMODULE krt = LoadLibraryA(path); // load krt.dll of the same directory
-        if (!krt) {
-            return; // krt.dll not found, not hooking KRSAVerifyFile
+        std::span<const uint8_t> data;
+        std::optional<std::span<const uint8_t>> internalName = VersionUtil::QueryVersionInfoValue(versionInfoData, "\\StringFileInfo\\000004b0\\InternalName");
+        if (internalName.has_value() && internalName->size() == 8 && std::memcmp(internalName->data(), "KPacket", 8) == 0) { // WPS Office Packet
+            HMODULE module = ModuleUtil::GetHandle(std::nullopt);
+            data = std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(module), ModuleUtil::GetSizeOfMemory(module));
+        } else { // WPS Office Product
+            HMODULE module = ModuleUtil::GetSelfHandle();
+            std::string krtPath = ModuleUtil::GetBasePath(module) + "krt.dll";
+            HMODULE krtModule = LoadLibraryA(krtPath.data()); // Load krt.dll of the same directory
+            if (!krtModule) {
+                throw std::runtime_error("Failed to load krt.dll");
+            }
+            data = std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(krtModule), ModuleUtil::GetSizeOfMemory(krtModule));
         }
-        std::span<const uint8_t> krtData(reinterpret_cast<const uint8_t*>(krt), ProcessUtil::GetModuleSize(krt));
-        const std::vector<const uint8_t*> matches = PatternUtil::FindPattern(krtData, pattern, 0, false, 1);
-        if (matches.size() > 0) {
-            kRSAVerifyFile = reinterpret_cast<decltype(kRSAVerifyFile)>(matches[0]);
+        std::vector<const uint8_t*> matches = PatternUtil::FindPattern(data, pattern, 0, false, 1);
+        if (matches.size() == 0) {
+            throw std::runtime_error("Failed to find KRSAVerifyFile pattern");
         }
+        kRSAVerifyFile = reinterpret_cast<decltype(kRSAVerifyFile)>(matches[0]);
     }
 
-    void KRSAVerifyFileHook::Install(HMODULE module) {
+    void KRSAVerifyFileHook::Install() noexcept {
         if (kRSAVerifyFile != nullptr) {
             return;
         }
-        UpdateKRSAVerifyFileAddress(module);
+        try {
+            UpdateKRSAVerifyFileAddress();
+        } catch (const std::exception& exception) {
+            MessageBoxA(nullptr, exception.what(), "Hook Failed", MB_ICONSTOP);
+            return;
+        }
         if (kRSAVerifyFile == nullptr) {
             return;
         }
@@ -57,17 +73,20 @@ namespace WPSHashPatch {
         DetourAttach(&reinterpret_cast<PVOID&>(kRSAVerifyFile), KRSAVerifyFileHook::KRSAVerifyFile);
         LONG code = DetourTransactionCommit();
         if (code != NO_ERROR) {
-            throw std::runtime_error("Failed to hook KRSAVerifyFile, error code: " + std::to_string(code));
+            MessageBoxA(nullptr, ("Failed to hook KRSAVerifyFile, error code: " + std::to_string(code)).data(), "Hook Failed", MB_ICONSTOP);
         }
     }
 
-    void KRSAVerifyFileHook::Uninstall() {
+    void KRSAVerifyFileHook::Uninstall() noexcept {
         if (kRSAVerifyFile == nullptr) {
             return;
         }
         DetourTransactionBegin();
         DetourUpdateThread(GetCurrentThread());
         DetourDetach(reinterpret_cast<PVOID*>(kRSAVerifyFile), KRSAVerifyFileHook::KRSAVerifyFile);
-        DetourTransactionCommit();
+        LONG code = DetourTransactionCommit();
+        if (code != NO_ERROR) {
+            MessageBoxA(nullptr, ("Failed to unhook KRSAVerifyFile, error code: " + std::to_string(code)).data(), "Unhook Failed", MB_ICONSTOP);
+        }
     }
 }

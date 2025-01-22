@@ -3,7 +3,7 @@
 #include <vector>
 #include <span>
 
-namespace WPSHashPatch {
+namespace WPSProfileVerificationPatch {
     class PatternUtil {
     private:
         PatternUtil() = delete;

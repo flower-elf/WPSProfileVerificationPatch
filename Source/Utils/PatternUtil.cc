@@ -1,9 +1,9 @@
-#include "PatternUtil.h"
 #include <stdexcept>
 #include <optional>
 #include <vector>
+#include "PatternUtil.h"
 
-namespace WPSHashPatch {
+namespace WPSProfileVerificationPatch {
     std::vector<const uint8_t*> PatternUtil::FindPattern(std::span<const uint8_t> data,
                                                          std::span<const uint16_t> pattern,
                                                          size_t index,

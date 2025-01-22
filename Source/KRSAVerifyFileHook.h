@@ -1,8 +1,8 @@
 #pragma once
-#include "Framework.h"
+#include <Windows.h>
 #include <string>
 
-namespace WPSHashPatch {
+namespace WPSProfileVerificationPatch {
     class KRSAVerifyFileHook {
     private:
         KRSAVerifyFileHook() = delete;
@@ -10,10 +10,10 @@ namespace WPSHashPatch {
     private:
         static bool (*kRSAVerifyFile)(const std::string& publicKey, const std::string& fileHash, const std::string& fileSignature);
         static bool KRSAVerifyFile(const std::string& publicKey, const std::string& fileHash, const std::string& fileSignature);
-        static void UpdateKRSAVerifyFileAddress(HMODULE module);
+        static void UpdateKRSAVerifyFileAddress();
 
     public:
-        static void Install(HMODULE module);
-        static void Uninstall();
+        static void Install() noexcept;
+        static void Uninstall() noexcept;
     };
 }

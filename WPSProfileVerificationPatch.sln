@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WPSProfileVerificationPatch", "WPSProfileVerificationPatch.vcxproj", "{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		MainDebug|x64 = MainDebug|x64
+		MainDebug|x86 = MainDebug|x86
+		MainRelease|x64 = MainRelease|x64
+		MainRelease|x86 = MainRelease|x86
+		PacketDebug|x64 = PacketDebug|x64
+		PacketDebug|x86 = PacketDebug|x86
+		PacketRelease|x64 = PacketRelease|x64
+		PacketRelease|x86 = PacketRelease|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.MainDebug|x64.ActiveCfg = MainDebug|x64
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.MainDebug|x64.Build.0 = MainDebug|x64
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.MainDebug|x86.ActiveCfg = MainDebug|Win32
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.MainDebug|x86.Build.0 = MainDebug|Win32
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.MainRelease|x64.ActiveCfg = MainRelease|x64
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.MainRelease|x64.Build.0 = MainRelease|x64
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.MainRelease|x86.ActiveCfg = MainRelease|Win32
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.MainRelease|x86.Build.0 = MainRelease|Win32
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.PacketDebug|x64.ActiveCfg = PacketDebug|x64
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.PacketDebug|x64.Build.0 = PacketDebug|x64
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.PacketDebug|x86.ActiveCfg = PacketDebug|Win32
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.PacketDebug|x86.Build.0 = PacketDebug|Win32
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.PacketRelease|x64.ActiveCfg = PacketRelease|x64
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.PacketRelease|x64.Build.0 = PacketRelease|x64
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.PacketRelease|x86.ActiveCfg = PacketRelease|Win32
+		{E86DA48F-51D1-46C8-A9CF-B768F16F9DF0}.PacketRelease|x86.Build.0 = PacketRelease|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
