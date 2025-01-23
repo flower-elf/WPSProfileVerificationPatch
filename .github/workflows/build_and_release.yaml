@@ -20,21 +20,31 @@ jobs:
         with:
           msbuild-architecture: x64
 
-      - name: Build x64
-        run: msbuild -m -p:Configuration=Release -p:Platform=x64
+      - name: Build Main x64
+        run: msbuild -m -p:Configuration=MainRelease -p:Platform=x64
 
-      - name: Build x86
-        run: msbuild -m -p:Configuration=Release -p:Platform=x86
+      - name: Build Main x86
+        run: msbuild -m -p:Configuration=MainRelease -p:Platform=x86
+
+      - name: Build Packet x64
+        run: msbuild -m -p:Configuration=PacketRelease -p:Platform=x64
+
+      - name: Build Packet x86
+        run: msbuild -m -p:Configuration=PacketRelease -p:Platform=x86
 
       - name: Rename
         run: |
-          Rename-Item -Path x64/Release/version.dll -NewName version64.dll
-          Rename-Item -Path Release/version.dll -NewName version32.dll
+          Rename-Item -Path x64/MainRelease/ncrypt.dll -NewName ncrypt64.dll
+          Rename-Item -Path MainRelease/ncrypt.dll -NewName ncrypt32.dll
+          Rename-Item -Path x64/PacketRelease/msi.dll -NewName msi64.dll
+          Rename-Item -Path PacketRelease/msi.dll -NewName msi32.dll
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           fail_on_unmatched_files: true
           files: |
-            x64/Release/version64.dll
-            Release/version32.dll
+            x64/MainRelease/ncrypt64.dll
+            MainRelease/ncrypt32.dll
+            x64/PacketRelease/msi64.dll
+            PacketRelease/msi32.dll
