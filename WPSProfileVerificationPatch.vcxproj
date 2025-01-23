@@ -67,18 +67,8 @@
     <ClInclude Include="Source\ProxyLibrary\ProxyLibraryGlobals.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source\ProxyLibrary\Msi\ProxyLibraryExports.def">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='MainRelease|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='MainDebug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='MainRelease|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='MainDebug|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="Source\ProxyLibrary\NCrypt\ProxyLibraryExports.def">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='PacketRelease|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='PacketDebug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='PacketRelease|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='PacketDebug|x64'">true</ExcludedFromBuild>
-    </None>
+    <None Include="Source\ProxyLibrary\Msi\ProxyLibraryExports.def" />
+    <None Include="Source\ProxyLibrary\NCrypt\ProxyLibraryExports.def" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="Source\ProxyLibrary\Msi\ProxyLibraryExports32.asm">
@@ -116,6 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\Resources\Resources.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Source\Resources\Manifest.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
