@@ -88,7 +88,7 @@ namespace WPSProfileVerificationPatch {
         }
         DetourTransactionBegin();
         DetourUpdateThread(GetCurrentThread());
-        DetourDetach(reinterpret_cast<PVOID*>(kRSAVerifyFile), KRSAVerifyFileHook::KRSAVerifyFile);
+        DetourDetach(&reinterpret_cast<PVOID&>(kRSAVerifyFile), KRSAVerifyFileHook::KRSAVerifyFile);
         LONG code = DetourTransactionCommit();
         if (code != NO_ERROR) {
             MessageBoxA(nullptr, ("Failed to unhook KRSAVerifyFile, error code: " + std::to_string(code)).data(), "Unhook Failed", MB_ICONSTOP);
