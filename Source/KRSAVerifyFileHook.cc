@@ -12,6 +12,7 @@ namespace WPSProfileVerificationPatch {
     bool (*KRSAVerifyFileHook::kRSAVerifyFile)(const std::string& publicKey, const std::string& fileHash, const std::string& fileSignature) = nullptr;
 
     bool KRSAVerifyFileHook::KRSAVerifyFile(const std::string& publicKey, const std::string& fileHash, const std::string& fileSignature) {
+        // 如果数字签名全部为 0 则通过校验，否则调用原始校验函数
         for (std::string::size_type i = 0; i < fileSignature.size(); i++) {
             if (fileSignature[i] != '0') {
                 return kRSAVerifyFile(publicKey, fileHash, fileSignature);
@@ -31,18 +32,22 @@ namespace WPSProfileVerificationPatch {
         std::string fileName = ModuleUtil::GetFileName(nullptr);
         std::unique_ptr<const uint8_t[]> versionInfoData = VersionUtil::GetVersionInfoData(fileName);
         std::optional<std::span<const uint8_t>> productName = VersionUtil::QueryVersionInfoValue(versionInfoData, "\\StringFileInfo\\000004b0\\ProductName");
-        if (!productName.has_value() || productName->size() != 11 || std::memcmp(productName->data(), "WPS Office", 11) != 0) { // Not WPS Office
+        if (!productName.has_value() || productName->size() != 11 || std::memcmp(productName->data(), "WPS Office", 11) != 0) {
+            // ProductName 不是 WPS Office，不进行 Hook
             return;
         }
         std::span<const uint8_t> data;
         std::optional<std::span<const uint8_t>> internalName = VersionUtil::QueryVersionInfoValue(versionInfoData, "\\StringFileInfo\\000004b0\\InternalName");
-        if (internalName.has_value() && internalName->size() == 8 && std::memcmp(internalName->data(), "KPacket", 8) == 0) { // WPS Office Packet
+        if (internalName.has_value() && internalName->size() == 8 && std::memcmp(internalName->data(), "KPacket", 8) == 0) {
+            // InternalName 是 KPacket 表明这是安装程序，要在主模块中查找特征码
             HMODULE module = ModuleUtil::GetHandle(std::nullopt);
             data = std::span<const uint8_t>(reinterpret_cast<const uint8_t*>(module), ModuleUtil::GetSizeOfMemory(module));
-        } else { // WPS Office Product
+        } else {
+            // 否则表明这是主程序，要在 krt.dll 中查找特征码
             HMODULE module = ModuleUtil::GetSelfHandle();
             std::string krtPath = ModuleUtil::GetBasePath(module) + "krt.dll";
-            HMODULE krtModule = LoadLibraryA(krtPath.data()); // Load krt.dll of the same directory
+            // 本模块加载时 krt.dll 还未被加载，要主动加载本模块同目录下的 krt.dll
+            HMODULE krtModule = LoadLibraryA(krtPath.data());
             if (!krtModule) {
                 throw std::runtime_error("Failed to load krt.dll");
             }
@@ -60,7 +65,7 @@ namespace WPSProfileVerificationPatch {
             return;
         }
         try {
-            UpdateKRSAVerifyFileAddress();
+            UpdateKRSAVerifyFileAddress(); // 只有这里会抛出异常
         } catch (const std::exception& exception) {
             MessageBoxA(nullptr, exception.what(), "Hook Failed", MB_ICONSTOP);
             return;
