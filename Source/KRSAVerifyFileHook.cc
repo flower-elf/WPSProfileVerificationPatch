@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <stdexcept>
+#include <sstream>
 #include <memory>
 #include <array>
 #include "Detours.h"
@@ -78,7 +79,7 @@ namespace WPSProfileVerificationPatch {
         DetourAttach(&reinterpret_cast<PVOID&>(kRSAVerifyFile), KRSAVerifyFileHook::KRSAVerifyFile);
         LONG code = DetourTransactionCommit();
         if (code != NO_ERROR) {
-            MessageBoxA(nullptr, ("Failed to hook KRSAVerifyFile, error code: " + std::to_string(code)).data(), "Hook Failed", MB_ICONSTOP);
+            MessageBoxA(nullptr, (std::stringstream() << "Failed to hook KRSAVerifyFile, error code: " << code).str().data(), "Hook Failed", MB_ICONSTOP);
         }
     }
 
@@ -91,7 +92,7 @@ namespace WPSProfileVerificationPatch {
         DetourDetach(&reinterpret_cast<PVOID&>(kRSAVerifyFile), KRSAVerifyFileHook::KRSAVerifyFile);
         LONG code = DetourTransactionCommit();
         if (code != NO_ERROR) {
-            MessageBoxA(nullptr, ("Failed to unhook KRSAVerifyFile, error code: " + std::to_string(code)).data(), "Unhook Failed", MB_ICONSTOP);
+            MessageBoxA(nullptr, (std::stringstream() << "Failed to unhook KRSAVerifyFile, error code: " << code).str().data(), "Unhook Failed", MB_ICONSTOP);
         }
     }
 }
