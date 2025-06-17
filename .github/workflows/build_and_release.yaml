@@ -45,6 +45,7 @@ jobs:
           fail_on_unmatched_files: true
           files: |
             x64/MainRelease/ncrypt64.dll
+            
             MainRelease/ncrypt32.dll
             x64/PacketRelease/msi64.dll
             PacketRelease/msi32.dll
